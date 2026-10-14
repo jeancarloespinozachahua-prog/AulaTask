@@ -20,8 +20,1115 @@
         })();
     </script>
 
-    <link rel="stylesheet" href="estilos.css">
-    <script src="app.js" defer></script>
+    <style>
+/* ==========================================================
+   AulaTask · Estilos
+   1. Variables y temas      5. Formulario
+   2. Base                   6. Lista de tareas
+   3. Encabezado y resumen   7. Avisos
+   4. Componentes            8. Adaptación a pantallas
+   ========================================================== */
+
+/* ---------- 1. Variables y temas ---------- */
+:root {
+    color-scheme: light;
+
+    --papel: #f4f6fb;
+    --superficie: #ffffff;
+    --superficie-2: #edf0f7;
+    --tinta: #161e33;
+    --tinta-suave: #586178;
+    --borde: #e0e5f0;
+    --borde-fuerte: #c5ccdc;
+
+    --acento: #3451d1;
+    --acento-hover: #2a41ab;
+    --acento-suave: #e6ebfc;
+    --sobre-acento: #ffffff;
+    --foco: rgba(52, 81, 209, 0.45);
+
+    --exito: #23895a;
+    --peligro: #d6394b;
+    --peligro-suave: #fde7ea;
+    --peligro-texto: #a5202f;
+    --alerta: #c77a06;
+    --alerta-suave: #fcf0d8;
+    --alerta-texto: #85500a;
+    --baja: #8d98b0;
+    --neutro-suave: #e9ecf3;
+    --neutro-texto: #465069;
+
+    --check-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+
+    /* Avatares: el matiz (--tono) lo calcula app.js a partir del nombre. */
+    --av-fondo: 60% 88%;
+    --av-texto: 55% 26%;
+
+    --fuente: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui,
+        -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    --radio-control: 10px;
+    --radio-fila: 12px;
+    --radio-panel: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-tema="claro"]) {
+        color-scheme: dark;
+        --papel: #0d1120;
+        --superficie: #151a2d;
+        --superficie-2: #1c2340;
+        --tinta: #e7eaf5;
+        --tinta-suave: #98a2bc;
+        --borde: #262e4d;
+        --borde-fuerte: #3a4468;
+        --acento: #8097ff;
+        --acento-hover: #9daeff;
+        --acento-suave: #222b58;
+        --sobre-acento: #0b1020;
+        --foco: rgba(128, 151, 255, 0.55);
+        --exito: #3dba84;
+        --peligro: #ff6b7d;
+        --peligro-suave: #3b1a24;
+        --peligro-texto: #ff9fab;
+        --alerta: #f0ae3c;
+        --alerta-suave: #3a2c12;
+        --alerta-texto: #f5c877;
+        --baja: #66708c;
+        --neutro-suave: #222a47;
+        --neutro-texto: #b3bcd4;
+        --check-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b1020' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+        --av-fondo: 35% 26%;
+        --av-texto: 75% 86%;
+    }
+}
+
+:root[data-tema="oscuro"] {
+    color-scheme: dark;
+    --papel: #0d1120;
+    --superficie: #151a2d;
+    --superficie-2: #1c2340;
+    --tinta: #e7eaf5;
+    --tinta-suave: #98a2bc;
+    --borde: #262e4d;
+    --borde-fuerte: #3a4468;
+    --acento: #8097ff;
+    --acento-hover: #9daeff;
+    --acento-suave: #222b58;
+    --sobre-acento: #0b1020;
+    --foco: rgba(128, 151, 255, 0.55);
+    --exito: #3dba84;
+    --peligro: #ff6b7d;
+    --peligro-suave: #3b1a24;
+    --peligro-texto: #ff9fab;
+    --alerta: #f0ae3c;
+    --alerta-suave: #3a2c12;
+    --alerta-texto: #f5c877;
+    --baja: #66708c;
+    --neutro-suave: #222a47;
+    --neutro-texto: #b3bcd4;
+    --check-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b1020' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+    --av-fondo: 35% 26%;
+    --av-texto: 75% 86%;
+}
+
+/* ---------- 2. Base ---------- */
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font: 400 0.9375rem/1.55 var(--fuente);
+    background: var(--papel);
+    color: var(--tinta);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, p, dl, dd, fieldset {
+    margin: 0;
+}
+
+fieldset {
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+legend {
+    padding: 0;
+}
+
+button, input, select {
+    font: inherit;
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 3px solid var(--foco);
+    outline-offset: 2px;
+}
+
+main:focus {
+    outline: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.saltar {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: var(--radio-control);
+    background: var(--acento);
+    color: var(--sobre-acento);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.saltar:focus {
+    top: 12px;
+}
+
+.icono {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ---------- 3. Encabezado y resumen ---------- */
+.encabezado {
+    background: var(--superficie);
+    border-bottom: 1px solid var(--borde);
+}
+
+.encabezado-interno {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 14px 24px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radio-control);
+    background: var(--acento);
+    color: var(--sobre-acento);
+}
+
+.logo svg {
+    width: 22px;
+    height: 22px;
+}
+
+.marca h1 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.marca p {
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+}
+
+.acciones-encabezado {
+    display: flex;
+    gap: 8px;
+}
+
+.contenedor {
+    max-width: 1120px;
+    margin: 36px auto 56px;
+    padding: 0 24px;
+}
+
+.resumen {
+    margin-bottom: 32px;
+}
+
+.resumen h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.resumen-texto {
+    margin-top: 6px;
+    color: var(--tinta-suave);
+    max-width: 60ch;
+}
+
+.progreso {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.barra {
+    flex: 1;
+    display: flex;
+    gap: 3px;
+    height: 12px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--superficie-2);
+}
+
+.seg {
+    display: block;
+    width: 0;
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.seg-hechas { background: var(--exito); }
+.seg-pendientes { background: var(--acento); }
+.seg-vencidas { background: var(--peligro); }
+
+.porcentaje {
+    min-width: 8.5rem;
+    text-align: right;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+    max-width: 640px;
+}
+
+.indicadores dt {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+}
+
+.indicadores dd {
+    margin-top: 2px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.punto {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.punto-hechas { background: var(--exito); }
+.punto-pendientes { background: var(--acento); }
+.punto-vencidas { background: var(--peligro); }
+
+/* Alertas de plazos: por vencer (ámbar) y vencidas (rojo) */
+.alertas {
+    --alerta-borde: var(--alerta);
+    --alerta-fondo: var(--alerta-suave);
+    --alerta-color: var(--alerta-texto);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding: 16px 12px 16px 18px;
+    border: 1px solid var(--alerta-borde);
+    border-radius: var(--radio-panel);
+    background: var(--alerta-fondo);
+    animation: entrar 0.25s ease-out;
+}
+
+.alertas.critica {
+    --alerta-borde: var(--peligro);
+    --alerta-fondo: var(--peligro-suave);
+    --alerta-color: var(--peligro-texto);
+}
+
+.alertas-icono {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--alerta-borde);
+    color: var(--papel);
+}
+
+.alertas-cuerpo {
+    flex: 1;
+    min-width: 0;
+}
+
+.alertas-titulo {
+    color: var(--alerta-color);
+    font-weight: 700;
+    line-height: 1.4;
+    padding-top: 7px;
+}
+
+.alertas-lista {
+    display: grid;
+    gap: 6px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.alertas-lista li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+    font-size: 0.875rem;
+}
+
+.alertas-lista .alerta-tarea {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.alertas-lista .alerta-persona {
+    color: var(--tinta-suave);
+}
+
+.alertas-lista .alerta-mas {
+    color: var(--tinta-suave);
+}
+
+.alertas .chip.vencida {
+    background: var(--superficie);
+}
+
+.alertas .chip.pronto {
+    background: var(--superficie);
+}
+
+/* ---------- 4. Componentes ---------- */
+.disposicion {
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.panel {
+    padding: 24px;
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-panel);
+}
+
+.panel h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: var(--radio-control);
+    background: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.btn-principal {
+    background: var(--acento);
+    color: var(--sobre-acento);
+}
+
+.btn-principal:hover:not(:disabled) {
+    background: var(--acento-hover);
+}
+
+.btn-secundario {
+    border-color: var(--borde-fuerte);
+}
+
+.btn-secundario:hover:not(:disabled) {
+    background: var(--superficie-2);
+}
+
+.btn-texto {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+}
+
+.btn-texto:hover:not(:disabled) {
+    background: var(--superficie-2);
+    color: var(--tinta);
+}
+
+.btn-icono {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: none;
+    color: var(--tinta-suave);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.btn-icono:hover {
+    background: var(--superficie-2);
+    color: var(--tinta);
+}
+
+.btn-icono.con-borde {
+    border-color: var(--borde-fuerte);
+}
+
+.btn-icono.eliminar:hover {
+    background: var(--peligro-suave);
+    color: var(--peligro-texto);
+}
+
+input[type="text"],
+input[type="search"],
+input[type="date"],
+select {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: var(--radio-control);
+    background: var(--superficie);
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input::placeholder {
+    color: var(--tinta-suave);
+    opacity: 0.8;
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="date"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--acento);
+    box-shadow: 0 0 0 3px var(--foco);
+}
+
+[aria-invalid="true"] {
+    border-color: var(--peligro) !important;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 9px;
+    border-radius: 999px;
+    background: var(--neutro-suave);
+    color: var(--neutro-texto);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.chip.vencida { background: var(--peligro-suave); color: var(--peligro-texto); }
+.chip.pronto { background: var(--alerta-suave); color: var(--alerta-texto); }
+.chip.prio-alta { background: var(--peligro-suave); color: var(--peligro-texto); }
+.chip.prio-media { background: var(--alerta-suave); color: var(--alerta-texto); }
+.chip.prio-baja { background: var(--neutro-suave); color: var(--neutro-texto); }
+
+/* Control segmentado (prioridad y filtro de estado) */
+.segmentos {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--radio-control);
+    background: var(--superficie-2);
+}
+
+.segmentos label {
+    position: relative;
+    cursor: pointer;
+}
+
+.segmentos input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.segmentos span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--tinta-suave);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.segmentos label:hover span {
+    color: var(--tinta);
+}
+
+.segmentos input:checked + span {
+    background: var(--superficie);
+    color: var(--tinta);
+    box-shadow: 0 0 0 1px var(--borde-fuerte);
+}
+
+.segmentos input:focus-visible + span {
+    outline: 3px solid var(--foco);
+    outline-offset: 1px;
+}
+
+.cuenta {
+    min-width: 1.4em;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--superficie);
+    color: var(--tinta-suave);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.segmentos input:checked + span .cuenta {
+    background: var(--acento-suave);
+    color: var(--acento);
+}
+
+/* ---------- 5. Formulario ---------- */
+.panel-formulario {
+    position: sticky;
+    top: 24px;
+}
+
+.panel-formulario.editando {
+    border-color: var(--acento);
+    box-shadow: 0 0 0 1px var(--acento);
+}
+
+#formulario {
+    margin-top: 18px;
+}
+
+.campo {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.campo > label,
+.campo > legend {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.opcional {
+    font-weight: 400;
+    color: var(--tinta-suave);
+}
+
+.error-campo {
+    color: var(--peligro-texto);
+    font-size: 0.8125rem;
+}
+
+.error-campo:empty {
+    display: none;
+}
+
+.prioridades {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.prioridades span::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--punto);
+}
+
+.p-alta { --punto: var(--peligro); }
+.p-media { --punto: var(--alerta); }
+.p-baja { --punto: var(--baja); }
+
+.acciones-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.acciones-form .btn-principal {
+    flex: 1;
+}
+
+/* ---------- 6. Lista de tareas ---------- */
+.cabecera-lista {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.cantidad {
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+    font-variant-numeric: tabular-nums;
+}
+
+.herramientas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.busqueda {
+    position: relative;
+    flex: 1 1 100%;
+}
+
+.busqueda .icono {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--tinta-suave);
+    pointer-events: none;
+}
+
+.busqueda input {
+    padding-left: 40px;
+}
+
+.selectores {
+    display: flex;
+    gap: 8px;
+}
+
+.selectores select {
+    width: auto;
+    height: 38px;
+    font-size: 0.875rem;
+}
+
+.lista {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tarea {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 14px;
+    padding: 14px 10px 14px 22px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-fila);
+    background: var(--superficie);
+    transition: border-color 0.15s;
+}
+
+/* Franja lateral: indica la prioridad, como el margen de un cuaderno. */
+.tarea::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--prio);
+}
+
+.tarea[data-prioridad="alta"] { --prio: var(--peligro); }
+.tarea[data-prioridad="media"] { --prio: var(--alerta); }
+.tarea[data-prioridad="baja"] { --prio: var(--baja); }
+
+.tarea:hover {
+    border-color: var(--borde-fuerte);
+}
+
+.tarea.editando {
+    border-color: var(--acento);
+    box-shadow: 0 0 0 1px var(--acento);
+}
+
+.tarea.destacada {
+    animation: destacar 1.4s ease-out;
+}
+
+@keyframes destacar {
+    from { background: var(--acento-suave); }
+    to { background: var(--superficie); }
+}
+
+.check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    margin: 1px 0 0;
+    border: 2px solid var(--borde-fuerte);
+    border-radius: 7px;
+    background: var(--superficie) center / 80% no-repeat;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.check:hover {
+    border-color: var(--exito);
+}
+
+.check:checked {
+    border-color: var(--exito);
+    background-color: var(--exito);
+    background-image: var(--check-img);
+}
+
+.titulo-tarea {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.tarea.terminada::before {
+    opacity: 0.35;
+}
+
+.tarea.terminada .titulo-tarea {
+    color: var(--tinta-suave);
+    text-decoration: line-through;
+}
+
+.tarea.terminada .meta {
+    opacity: 0.75;
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    margin-top: 7px;
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+}
+
+.responsable {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    font-weight: 500;
+    color: var(--tinta);
+}
+
+.responsable .nombre {
+    overflow-wrap: anywhere;
+}
+
+.avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: hsl(var(--tono) var(--av-fondo));
+    color: hsl(var(--tono) var(--av-texto));
+    font-size: 0.625rem;
+    font-weight: 700;
+}
+
+.acciones {
+    display: flex;
+    gap: 2px;
+}
+
+.vacio {
+    padding: 36px 16px;
+    text-align: center;
+}
+
+.vacio .icono {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 10px;
+    stroke-width: 1.5;
+    color: var(--tinta-suave);
+}
+
+.vacio-titulo {
+    font-weight: 600;
+}
+
+.vacio-texto {
+    max-width: 40ch;
+    margin: 4px auto 18px;
+    color: var(--tinta-suave);
+}
+
+.pie-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--borde);
+}
+
+.pie-lista #boton-borrar-completadas {
+    margin-left: auto;
+}
+
+.pie {
+    padding: 0 24px 32px;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--tinta-suave);
+}
+
+/* ---------- 7. Avisos ---------- */
+.avisos {
+    position: fixed;
+    inset: auto 0 20px 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+    pointer-events: none;
+}
+
+.aviso {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 440px;
+    padding: 11px 14px 11px 18px;
+    border: 1px solid #2c3560;
+    border-radius: var(--radio-fila);
+    background: #1b2340;
+    color: #ffffff;
+    font-size: 0.875rem;
+    box-shadow: 0 10px 28px rgba(8, 12, 30, 0.35);
+    pointer-events: auto;
+    animation: entrar 0.2s ease-out;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.aviso.error {
+    background: #5a1823;
+    border-color: #7d2433;
+}
+
+.aviso.saliendo {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.aviso-accion {
+    padding: 4px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #b8c4ff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.aviso-accion:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes entrar {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* ---------- 8. Adaptación a pantallas ---------- */
+@media (max-width: 900px) {
+    .disposicion {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel-formulario {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .encabezado-interno,
+    .contenedor {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .contenedor {
+        margin-top: 24px;
+    }
+
+    .resumen h2 {
+        font-size: 1.5rem;
+    }
+
+    .progreso {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .barra {
+        flex: none;
+        order: 2;
+    }
+
+    .porcentaje {
+        order: 1;
+        min-width: 0;
+        text-align: left;
+    }
+
+    .indicadores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+    .segmentos#filtro-estado {
+        width: 100%;
+    }
+
+    #filtro-estado label {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    #filtro-estado span {
+        gap: 4px;
+        padding: 6px 4px;
+        font-size: 0.75rem;
+    }
+
+    #filtro-estado .cuenta {
+        min-width: 0;
+        padding: 0 4px;
+    }
+
+    .selectores {
+        width: 100%;
+    }
+
+    .selectores select {
+        flex: 1;
+    }
+
+    .pie-lista #boton-borrar-completadas {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 360px) {
+    #filtro-estado .cuenta {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+    </style>
 </head>
 <body>
     <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -40,6 +1147,19 @@
                 </div>
             </div>
 
+            <div class="acciones-encabezado">
+            <button type="button" id="boton-sonido" class="btn-icono con-borde"
+                    aria-label="Silenciar alertas sonoras" title="Sonido de alertas">
+                <svg id="icono-sonido-on" class="icono" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+                </svg>
+                <svg id="icono-sonido-off" class="icono" viewBox="0 0 24 24" aria-hidden="true" hidden>
+                    <path d="M18 8a6 6 0 0 0-9.3-5M6 8c0 7-3 9-3 9h14M13.7 21a2 2 0 0 1-3.4 0"/>
+                    <path d="M2 2l20 20"/>
+                </svg>
+            </button>
+
             <button type="button" id="boton-tema" class="btn-icono con-borde"
                     aria-label="Cambiar a tema oscuro" title="Cambiar tema">
                 <svg id="icono-luna" class="icono" viewBox="0 0 24 24" aria-hidden="true">
@@ -50,6 +1170,7 @@
                     <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
                 </svg>
             </button>
+            </div>
         </div>
     </header>
 
@@ -85,6 +1206,25 @@
                     <dd id="vencidas">0</dd>
                 </div>
             </dl>
+        </section>
+
+        <section id="alertas" class="alertas" role="alert" aria-labelledby="alertas-titulo" hidden>
+            <span class="alertas-icono" aria-hidden="true">
+                <svg class="icono" viewBox="0 0 24 24">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+                </svg>
+            </span>
+            <div class="alertas-cuerpo">
+                <p id="alertas-titulo" class="alertas-titulo"></p>
+                <ul id="alertas-lista" class="alertas-lista"></ul>
+            </div>
+            <button type="button" id="alertas-cerrar" class="btn-icono"
+                    aria-label="Ocultar alertas" title="Ocultar alertas">
+                <svg class="icono" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
         </section>
 
         <div class="disposicion">
@@ -226,5 +1366,1115 @@
     </footer>
 
     <div id="avisos" class="avisos" role="status" aria-live="polite"></div>
+    <script>
+/* ==========================================================
+   AulaTask · Lógica de la aplicación
+   Secciones: 1. Configuración   5. Avisos
+              2. Utilidades      6. Formulario y edición
+              3. Persistencia    7. Acciones sobre tareas
+              4. Renderizado     8. Eventos e inicio
+   ========================================================== */
+(function () {
+    "use strict";
+
+    /* ---------- 1. Configuración ---------- */
+    const CLAVE_DATOS = "aulatask.v1";
+    const CLAVE_TEMA = "aulatask.tema";
+    const CLAVE_SONIDO = "aulatask.sonido";
+    const DIAS_AVISO = 1;          // "Por vencer" = vence hoy o dentro de este número de días.
+    const MAX_ALERTAS_VISIBLES = 5;
+    const TITULO_BASE = document.title;
+    const PRIORIDADES = ["alta", "media", "baja"];
+    const PESO_PRIORIDAD = { alta: 0, media: 1, baja: 2 };
+    const ETIQUETA_PRIORIDAD = { alta: "Alta", media: "Media", baja: "Baja" };
+    const TAMANO_MAXIMO_IMPORTACION = 2 * 1024 * 1024;
+
+    const $ = (id) => document.getElementById(id);
+
+    const formulario = $("formulario");
+    const panelFormulario = $("panel-formulario");
+    const tituloFormulario = $("titulo-formulario");
+    const campoTitulo = $("titulo");
+    const campoResponsable = $("responsable");
+    const campoMateria = $("materia");
+    const campoFecha = $("fecha");
+    const errorTitulo = $("error-titulo");
+    const errorResponsable = $("error-responsable");
+    const botonGuardar = $("boton-guardar");
+    const botonCancelar = $("boton-cancelar");
+    const listaResponsables = $("lista-responsables");
+    const listaMaterias = $("lista-materias");
+
+    const lista = $("lista");
+    const vacio = $("vacio");
+    const vacioTitulo = $("vacio-titulo");
+    const vacioTexto = $("vacio-texto");
+    const vacioAccion = $("vacio-accion");
+    const cantidad = $("cantidad");
+    const campoBusqueda = $("busqueda");
+    const filtroPrioridad = $("filtro-prioridad");
+    const selectorOrden = $("orden");
+
+    const botonExportar = $("boton-exportar");
+    const botonImportar = $("boton-importar");
+    const archivoImportar = $("archivo-importar");
+    const botonBorrarCompletadas = $("boton-borrar-completadas");
+    const zonaAvisos = $("avisos");
+
+    const alertas = $("alertas");
+    const alertasTitulo = $("alertas-titulo");
+    const alertasLista = $("alertas-lista");
+    const alertasCerrar = $("alertas-cerrar");
+    const botonSonido = $("boton-sonido");
+    const iconoSonidoOn = $("icono-sonido-on");
+    const iconoSonidoOff = $("icono-sonido-off");
+
+    const botonTema = $("boton-tema");
+    const iconoLuna = $("icono-luna");
+    const iconoSol = $("icono-sol");
+
+    /* ---------- Estado ---------- */
+    let tareas = [];
+    let idEditando = null;
+    let idDestacada = null;
+    let idEnfocar = null;
+    let accionVacio = null;
+
+    // Alertas y sonido
+    let sonidoActivo = true;
+    let huboGesto = false;          // Los navegadores solo permiten audio tras un clic o tecla.
+    let contextoAudio = null;
+    let sonidoPendiente = null;
+    let firmaDescartada = "";
+    let ultimaFirma = "";
+    let diaMostrado = "";
+    const notificadas = new Set();
+
+    const vista = {
+        busqueda: "",
+        estado: "todas",
+        prioridad: "todas",
+        orden: "recientes"
+    };
+
+    /* ---------- 2. Utilidades ---------- */
+    const formatoCorto = new Intl.DateTimeFormat("es", { day: "numeric", month: "short" });
+    const formatoLargo = new Intl.DateTimeFormat("es", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+
+    function generarId() {
+        if (typeof crypto !== "undefined" && crypto.randomUUID) {
+            return crypto.randomUUID();
+        }
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    }
+
+    function plural(n, singular, varios) {
+        return n === 1 ? singular : varios;
+    }
+
+    function limpiar(valor, maximo) {
+        return typeof valor === "string"
+            ? valor.trim().replace(/\s+/g, " ").slice(0, maximo)
+            : "";
+    }
+
+    // Quita tildes y mayúsculas para que la búsqueda sea tolerante.
+    function normalizar(texto) {
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    function iniciales(nombre) {
+        const partes = nombre.trim().split(/\s+/).filter(Boolean);
+        if (!partes.length) return "?";
+        const primera = partes[0][0];
+        const ultima = partes.length > 1 ? partes[partes.length - 1][0] : "";
+        return (primera + ultima).toUpperCase();
+    }
+
+    // Mismo nombre, mismo color: ayuda a reconocer responsables de un vistazo.
+    function tonoDe(nombre) {
+        let hash = 0;
+        for (const caracter of normalizar(nombre.trim())) {
+            hash = (hash * 31 + caracter.codePointAt(0)) >>> 0;
+        }
+        return hash % 360;
+    }
+
+    function fechaISO(fecha) {
+        const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+        const dia = String(fecha.getDate()).padStart(2, "0");
+        return fecha.getFullYear() + "-" + mes + "-" + dia;
+    }
+
+    function hoyLocal() {
+        const ahora = new Date();
+        return new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+    }
+
+    // Convierte "AAAA-MM-DD" en fecha local (evita el desfase por zona horaria).
+    function parsearFecha(texto) {
+        const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto || "");
+        if (!partes) return null;
+        const fecha = new Date(Number(partes[1]), Number(partes[2]) - 1, Number(partes[3]));
+        return fecha.getMonth() === Number(partes[2]) - 1 ? fecha : null;
+    }
+
+    function diasHasta(texto) {
+        const fecha = parsearFecha(texto);
+        if (!fecha) return null;
+        return Math.round((fecha - hoyLocal()) / 86400000);
+    }
+
+    function estaVencida(tarea) {
+        const dias = diasHasta(tarea.fecha);
+        return !tarea.completada && dias !== null && dias < 0;
+    }
+
+    function describirEntrega(tarea) {
+        const fecha = parsearFecha(tarea.fecha);
+        if (!fecha) return null;
+
+        const corta = formatoCorto.format(fecha);
+        const dias = diasHasta(tarea.fecha);
+
+        if (tarea.completada) return { texto: corta, clase: "" };
+        if (dias < -1) return { texto: "Venció hace " + (-dias) + " días", clase: "vencida" };
+        if (dias === -1) return { texto: "Venció ayer", clase: "vencida" };
+        if (dias === 0) return { texto: "Vence hoy", clase: "pronto" };
+        if (dias === 1) return { texto: "Vence mañana", clase: "pronto" };
+        if (dias <= 7) return { texto: "Vence en " + dias + " días", clase: "" };
+        return { texto: "Vence el " + corta, clase: "" };
+    }
+
+    /* ---------- 3. Persistencia ---------- */
+    function sanear(entrada) {
+        if (!Array.isArray(entrada)) return [];
+
+        const usados = new Set();
+        const resultado = [];
+
+        entrada.forEach(function (item) {
+            if (!item || typeof item !== "object") return;
+
+            const titulo = limpiar(item.titulo, 100);
+            const responsable = limpiar(item.responsable, 60);
+            if (!titulo || !responsable) return;
+
+            let id = typeof item.id === "string" || typeof item.id === "number"
+                ? String(item.id)
+                : generarId();
+            if (usados.has(id)) id = generarId();
+            usados.add(id);
+
+            resultado.push({
+                id: id,
+                titulo: titulo,
+                responsable: responsable,
+                materia: limpiar(item.materia, 60),
+                prioridad: PRIORIDADES.includes(item.prioridad) ? item.prioridad : "media",
+                fecha: parsearFecha(item.fecha) ? item.fecha : "",
+                completada: item.completada === true,
+                creada: Number.isFinite(item.creada) ? item.creada : Date.now()
+            });
+        });
+
+        return resultado;
+    }
+
+    function cargar() {
+        try {
+            const crudo = localStorage.getItem(CLAVE_DATOS);
+            if (!crudo) return [];
+            const datos = JSON.parse(crudo);
+            return sanear(Array.isArray(datos) ? datos : datos.tareas);
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function guardar() {
+        try {
+            localStorage.setItem(CLAVE_DATOS, JSON.stringify({ version: 1, tareas: tareas }));
+        } catch (error) {
+            avisar("No se pudo guardar en este navegador. Exporta tus tareas para no perderlas.", { error: true });
+        }
+    }
+
+    function persistir() {
+        guardar();
+        renderizar();
+    }
+
+    /* ---------- 4. Renderizado ---------- */
+    const ICONOS = {
+        editar: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        eliminar: '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/>'
+    };
+
+    function crearIcono(nombre) {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("aria-hidden", "true");
+        svg.classList.add("icono");
+        svg.innerHTML = ICONOS[nombre]; // Solo constantes internas, nunca datos del usuario.
+        return svg;
+    }
+
+    function crearChip(texto, clase) {
+        const chip = document.createElement("span");
+        chip.className = "chip" + (clase ? " " + clase : "");
+        chip.textContent = texto;
+        return chip;
+    }
+
+    function crearBotonIcono(nombre, etiqueta, clase, alHacerClic) {
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "btn-icono " + clase;
+        boton.setAttribute("aria-label", etiqueta);
+        boton.title = etiqueta;
+        boton.append(crearIcono(nombre));
+        boton.addEventListener("click", alHacerClic);
+        return boton;
+    }
+
+    function crearItem(tarea) {
+        const elemento = document.createElement("li");
+        elemento.className = "tarea";
+        elemento.dataset.id = tarea.id;
+        elemento.dataset.prioridad = tarea.prioridad;
+        if (tarea.completada) elemento.classList.add("terminada");
+        if (tarea.id === idEditando) elemento.classList.add("editando");
+        if (tarea.id === idDestacada) elemento.classList.add("destacada");
+
+        // Casilla de estado
+        const casilla = document.createElement("input");
+        casilla.type = "checkbox";
+        casilla.className = "check";
+        casilla.checked = tarea.completada;
+        casilla.setAttribute(
+            "aria-label",
+            (tarea.completada ? "Marcar como pendiente: " : "Marcar como completada: ") + tarea.titulo
+        );
+        casilla.addEventListener("change", function () {
+            cambiarEstado(tarea.id, casilla.checked);
+        });
+
+        // Contenido
+        const cuerpo = document.createElement("div");
+
+        const titulo = document.createElement("p");
+        titulo.className = "titulo-tarea";
+        titulo.textContent = tarea.titulo;
+
+        const meta = document.createElement("div");
+        meta.className = "meta";
+
+        const responsable = document.createElement("span");
+        responsable.className = "responsable";
+
+        const avatar = document.createElement("span");
+        avatar.className = "avatar";
+        avatar.setAttribute("aria-hidden", "true");
+        avatar.style.setProperty("--tono", tonoDe(tarea.responsable));
+        avatar.textContent = iniciales(tarea.responsable);
+
+        const prefijo = document.createElement("span");
+        prefijo.className = "sr-only";
+        prefijo.textContent = "Responsable: ";
+
+        const nombre = document.createElement("span");
+        nombre.className = "nombre";
+        nombre.textContent = tarea.responsable;
+
+        responsable.append(avatar, prefijo, nombre);
+        meta.append(responsable);
+
+        if (tarea.materia) {
+            meta.append(crearChip(tarea.materia, ""));
+        }
+
+        const entrega = describirEntrega(tarea);
+        if (entrega) {
+            const chipFecha = crearChip(entrega.texto, entrega.clase);
+            chipFecha.title = formatoLargo.format(parsearFecha(tarea.fecha));
+            meta.append(chipFecha);
+        }
+
+        const chipPrioridad = crearChip("", "prio-" + tarea.prioridad);
+        const prefijoPrioridad = document.createElement("span");
+        prefijoPrioridad.className = "sr-only";
+        prefijoPrioridad.textContent = "Prioridad ";
+        chipPrioridad.append(prefijoPrioridad, ETIQUETA_PRIORIDAD[tarea.prioridad]);
+        meta.append(chipPrioridad);
+
+        cuerpo.append(titulo, meta);
+
+        // Acciones
+        const acciones = document.createElement("div");
+        acciones.className = "acciones";
+        acciones.append(
+            crearBotonIcono("editar", "Editar tarea: " + tarea.titulo, "editar", function () {
+                iniciarEdicion(tarea.id);
+            }),
+            crearBotonIcono("eliminar", "Eliminar tarea: " + tarea.titulo, "eliminar", function () {
+                eliminarTarea(tarea.id);
+            })
+        );
+
+        elemento.append(casilla, cuerpo, acciones);
+        return elemento;
+    }
+
+    function coincideConFiltros(tarea) {
+        if (vista.estado === "pendientes" && tarea.completada) return false;
+        if (vista.estado === "completadas" && !tarea.completada) return false;
+        if (vista.prioridad !== "todas" && tarea.prioridad !== vista.prioridad) return false;
+
+        const consulta = normalizar(vista.busqueda.trim());
+        if (consulta) {
+            const texto = normalizar(tarea.titulo + " " + tarea.responsable + " " + tarea.materia);
+            if (!texto.includes(consulta)) return false;
+        }
+        return true;
+    }
+
+    function comparar(a, b) {
+        // Las pendientes siempre van antes que las completadas.
+        if (a.completada !== b.completada) return a.completada ? 1 : -1;
+
+        const porFecha = function () {
+            if (a.fecha === b.fecha) return 0;
+            if (!a.fecha) return 1;
+            if (!b.fecha) return -1;
+            return a.fecha < b.fecha ? -1 : 1;
+        };
+        const porCreacion = b.creada - a.creada;
+
+        if (vista.orden === "entrega") return porFecha() || porCreacion;
+        if (vista.orden === "prioridad") {
+            return (PESO_PRIORIDAD[a.prioridad] - PESO_PRIORIDAD[b.prioridad]) || porFecha() || porCreacion;
+        }
+        return porCreacion;
+    }
+
+    function configurarVacio(hayTareas) {
+        if (!hayTareas) {
+            vacioTitulo.textContent = "Todavía no hay tareas";
+            vacioTexto.textContent = "Registra la primera con el formulario o carga algunos ejemplos para explorar la aplicación.";
+            vacioAccion.textContent = "Cargar ejemplos";
+            accionVacio = cargarEjemplos;
+        } else {
+            vacioTitulo.textContent = "Ninguna tarea coincide";
+            vacioTexto.textContent = "Prueba con otra búsqueda o quita los filtros para ver todas las tareas.";
+            vacioAccion.textContent = "Quitar filtros";
+            accionVacio = function () {
+                limpiarFiltros();
+                renderizarLista();
+            };
+        }
+    }
+
+    function renderizarLista() {
+        const visibles = tareas.filter(coincideConFiltros).sort(comparar);
+
+        const fragmento = document.createDocumentFragment();
+        visibles.forEach(function (tarea) {
+            fragmento.append(crearItem(tarea));
+        });
+        lista.replaceChildren(fragmento);
+
+        lista.hidden = visibles.length === 0;
+        vacio.hidden = visibles.length > 0;
+        if (visibles.length === 0) configurarVacio(tareas.length > 0);
+
+        cantidad.textContent = tareas.length
+            ? "Mostrando " + visibles.length + " de " + tareas.length
+            : "";
+
+        // Si el usuario marcó una casilla, el foco vuelve a ella tras redibujar.
+        if (idEnfocar) {
+            const casilla = lista.querySelector('[data-id="' + CSS.escape(idEnfocar) + '"] .check');
+            if (casilla) casilla.focus({ preventScroll: true });
+            idEnfocar = null;
+        }
+        idDestacada = null;
+    }
+
+    function textoResumen(total, pendientes, vencidas, paraHoy) {
+        if (total === 0) return "Aún no hay tareas. Registra la primera para empezar.";
+        if (pendientes === 0) return "Todo al día. Completaste todas las tareas.";
+
+        const partes = ["Hay " + pendientes + " " + plural(pendientes, "tarea pendiente", "tareas pendientes") + "."];
+        if (vencidas) partes.push(vencidas + " " + plural(vencidas, "está vencida", "están vencidas") + ".");
+        if (paraHoy) partes.push(paraHoy + " " + plural(paraHoy, "vence", "vencen") + " hoy.");
+        return partes.join(" ");
+    }
+
+    function renderizarResumen() {
+        const total = tareas.length;
+        const hechas = tareas.filter(function (t) { return t.completada; }).length;
+        const pendientes = total - hechas;
+        const vencidas = tareas.filter(estaVencida).length;
+        const paraHoy = tareas.filter(function (t) {
+            return !t.completada && diasHasta(t.fecha) === 0;
+        }).length;
+
+        $("total").textContent = total;
+        $("completadas").textContent = hechas;
+        $("pendientes").textContent = pendientes;
+        $("vencidas").textContent = vencidas;
+        $("texto-resumen").textContent = textoResumen(total, pendientes, vencidas, paraHoy);
+
+        const pctHechas = total ? (hechas / total) * 100 : 0;
+        const pctVencidas = total ? (vencidas / total) * 100 : 0;
+        const pctPendientes = total ? 100 - pctHechas - pctVencidas : 0;
+
+        $("seg-hechas").style.width = pctHechas + "%";
+        $("seg-pendientes").style.width = pctPendientes + "%";
+        $("seg-vencidas").style.width = pctVencidas + "%";
+
+        const etiqueta = total ? Math.round(pctHechas) + " % completado" : "Sin tareas";
+        $("porcentaje").textContent = etiqueta;
+        $("barra").setAttribute("aria-label", etiqueta);
+
+        $("cuenta-todas").textContent = total;
+        $("cuenta-pendientes").textContent = pendientes;
+        $("cuenta-completadas").textContent = hechas;
+
+        botonExportar.disabled = total === 0;
+        botonBorrarCompletadas.disabled = hechas === 0;
+    }
+
+    function llenarSugerencias(datalist, valores) {
+        const unicos = Array.from(new Set(valores.filter(Boolean)))
+            .sort(function (a, b) { return a.localeCompare(b, "es"); });
+
+        datalist.replaceChildren(...unicos.map(function (valor) {
+            const opcion = document.createElement("option");
+            opcion.value = valor;
+            return opcion;
+        }));
+    }
+
+    function renderizar() {
+        renderizarLista();
+        renderizarResumen();
+        renderizarAlertas();
+        llenarSugerencias(listaResponsables, tareas.map(function (t) { return t.responsable; }));
+        llenarSugerencias(listaMaterias, tareas.map(function (t) { return t.materia; }));
+    }
+
+    /* ---------- 5. Avisos ---------- */
+    function avisar(texto, opciones) {
+        const config = opciones || {};
+        const aviso = document.createElement("div");
+        aviso.className = "aviso" + (config.error ? " error" : "");
+
+        const mensaje = document.createElement("span");
+        mensaje.textContent = texto;
+        aviso.append(mensaje);
+
+        let temporizador = null;
+        const cerrar = function () {
+            clearTimeout(temporizador);
+            aviso.classList.add("saliendo");
+            setTimeout(function () { aviso.remove(); }, 200);
+        };
+
+        if (config.accion) {
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.className = "aviso-accion";
+            boton.textContent = config.etiquetaAccion || "Deshacer";
+            boton.addEventListener("click", function () {
+                config.accion();
+                cerrar();
+            });
+            aviso.append(boton);
+        }
+
+        zonaAvisos.append(aviso);
+        while (zonaAvisos.children.length > 3) {
+            zonaAvisos.firstElementChild.remove();
+        }
+
+        temporizador = setTimeout(cerrar, config.accion || config.error ? 7000 : 4000);
+    }
+
+    /* ---------- 6. Formulario y edición ---------- */
+    function leerFormulario() {
+        return {
+            titulo: limpiar(campoTitulo.value, 100),
+            responsable: limpiar(campoResponsable.value, 60),
+            materia: limpiar(campoMateria.value, 60),
+            prioridad: formulario.elements.prioridad.value,
+            fecha: campoFecha.value
+        };
+    }
+
+    function marcarCampo(campo, elementoError, mensaje) {
+        elementoError.textContent = mensaje;
+        if (mensaje) {
+            campo.setAttribute("aria-invalid", "true");
+        } else {
+            campo.removeAttribute("aria-invalid");
+        }
+    }
+
+    function limpiarErrores() {
+        marcarCampo(campoTitulo, errorTitulo, "");
+        marcarCampo(campoResponsable, errorResponsable, "");
+    }
+
+    function validar(datos) {
+        const mensajeTitulo = datos.titulo.length < 3
+            ? "Escribe un título de al menos 3 caracteres."
+            : "";
+        const mensajeResponsable = datos.responsable.length < 2
+            ? "Indica quién es el responsable."
+            : "";
+
+        marcarCampo(campoTitulo, errorTitulo, mensajeTitulo);
+        marcarCampo(campoResponsable, errorResponsable, mensajeResponsable);
+
+        if (mensajeTitulo) {
+            campoTitulo.focus();
+            return false;
+        }
+        if (mensajeResponsable) {
+            campoResponsable.focus();
+            return false;
+        }
+        return true;
+    }
+
+    function mostrarModoCreacion() {
+        panelFormulario.classList.remove("editando");
+        tituloFormulario.textContent = "Nueva tarea";
+        botonGuardar.textContent = "Agregar tarea";
+        botonCancelar.hidden = true;
+    }
+
+    function iniciarEdicion(id) {
+        const tarea = tareas.find(function (t) { return t.id === id; });
+        if (!tarea) return;
+
+        idEditando = id;
+        limpiarErrores();
+
+        campoTitulo.value = tarea.titulo;
+        campoResponsable.value = tarea.responsable;
+        campoMateria.value = tarea.materia;
+        campoFecha.value = tarea.fecha;
+        formulario.elements.prioridad.value = tarea.prioridad;
+
+        panelFormulario.classList.add("editando");
+        tituloFormulario.textContent = "Editar tarea";
+        botonGuardar.textContent = "Guardar cambios";
+        botonCancelar.hidden = false;
+
+        renderizarLista();
+        campoTitulo.focus();
+    }
+
+    function salirDeEdicion() {
+        idEditando = null;
+        formulario.reset();
+        limpiarErrores();
+        mostrarModoCreacion();
+    }
+
+    function cancelarEdicion() {
+        salirDeEdicion();
+        renderizarLista();
+    }
+
+    /* ---------- 7. Acciones sobre tareas ---------- */
+    function limpiarFiltros() {
+        vista.busqueda = "";
+        vista.estado = "todas";
+        vista.prioridad = "todas";
+        campoBusqueda.value = "";
+        filtroPrioridad.value = "todas";
+        formulario.ownerDocument.querySelector('input[name="estado"][value="todas"]').checked = true;
+    }
+
+    function crearTarea(datos) {
+        const tarea = Object.assign({ id: generarId(), completada: false, creada: Date.now() }, datos);
+        tareas.push(tarea);
+        idDestacada = tarea.id;
+
+        // Si los filtros ocultarían la tarea nueva, se quitan para que se vea.
+        if (!coincideConFiltros(tarea)) limpiarFiltros();
+
+        formulario.reset();
+        limpiarErrores();
+        campoTitulo.focus();
+        persistir();
+        avisar("Tarea agregada.");
+    }
+
+    function actualizarTarea(datos) {
+        const tarea = tareas.find(function (t) { return t.id === idEditando; });
+        if (!tarea) {
+            cancelarEdicion();
+            return;
+        }
+
+        Object.assign(tarea, datos);
+        idDestacada = tarea.id;
+        salirDeEdicion();
+        persistir();
+        avisar("Cambios guardados.");
+    }
+
+    function cambiarEstado(id, completada) {
+        const tarea = tareas.find(function (t) { return t.id === id; });
+        if (!tarea) return;
+
+        tarea.completada = completada;
+        idEnfocar = id;
+        persistir();
+        avisar(completada ? "Tarea completada." : "Tarea marcada como pendiente.");
+    }
+
+    // Reinserta tareas eliminadas en su posición original.
+    function restaurar(elementos) {
+        elementos
+            .slice()
+            .sort(function (a, b) { return a.indice - b.indice; })
+            .forEach(function (item) {
+                tareas.splice(Math.min(item.indice, tareas.length), 0, item.tarea);
+            });
+        persistir();
+        avisar(elementos.length === 1 ? "Tarea restaurada." : "Tareas restauradas.");
+    }
+
+    function eliminarTarea(id) {
+        const indice = tareas.findIndex(function (t) { return t.id === id; });
+        if (indice < 0) return;
+
+        const quitada = tareas.splice(indice, 1)[0];
+        if (idEditando === id) salirDeEdicion();
+        persistir();
+
+        avisar("Tarea eliminada.", {
+            accion: function () { restaurar([{ tarea: quitada, indice: indice }]); }
+        });
+    }
+
+    function borrarCompletadas() {
+        const quitadas = [];
+        tareas = tareas.filter(function (tarea, indice) {
+            if (!tarea.completada) return true;
+            quitadas.push({ tarea: tarea, indice: indice });
+            return false;
+        });
+
+        if (!quitadas.length) {
+            avisar("No hay tareas completadas para borrar.");
+            return;
+        }
+
+        if (idEditando && !tareas.some(function (t) { return t.id === idEditando; })) {
+            salirDeEdicion();
+        }
+        persistir();
+
+        const n = quitadas.length;
+        avisar(n + " " + plural(n, "tarea eliminada", "tareas eliminadas") + ".", {
+            accion: function () { restaurar(quitadas); }
+        });
+    }
+
+    function cargarEjemplos() {
+        const enDias = function (n) {
+            const fecha = hoyLocal();
+            fecha.setDate(fecha.getDate() + n);
+            return fechaISO(fecha);
+        };
+
+        const ejemplos = [
+            ["Exposición sobre la Revolución Industrial", "Ana Torres", "Historia", "alta", 2, false],
+            ["Informe del laboratorio de química", "Luis Quispe", "Ciencias", "media", 5, true],
+            ["Maquetar la página de inicio", "Camila Rojas", "Programación web", "alta", -1, false],
+            ["Resolver la práctica de álgebra", "Diego Salas", "Matemática", "baja", 9, false],
+            ["Reunión de coordinación del equipo", "Ana Torres", "Proyecto", "media", 0, false]
+        ];
+
+        const ahora = Date.now();
+        ejemplos.forEach(function (datos, posicion) {
+            tareas.push({
+                id: generarId(),
+                titulo: datos[0],
+                responsable: datos[1],
+                materia: datos[2],
+                prioridad: datos[3],
+                fecha: enDias(datos[4]),
+                completada: datos[5],
+                creada: ahora - posicion * 1000
+            });
+        });
+
+        persistir();
+        avisar("Se cargaron " + ejemplos.length + " tareas de ejemplo.");
+    }
+
+    function exportar() {
+        if (!tareas.length) return;
+
+        const contenido = JSON.stringify({
+            aplicacion: "AulaTask",
+            version: 1,
+            exportado: new Date().toISOString(),
+            tareas: tareas
+        }, null, 2);
+
+        const blob = new Blob([contenido], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const enlace = document.createElement("a");
+        enlace.href = url;
+        enlace.download = "aulatask-" + fechaISO(new Date()) + ".json";
+        document.body.append(enlace);
+        enlace.click();
+        enlace.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+
+        avisar("Archivo exportado.");
+    }
+
+    async function importar(archivo) {
+        try {
+            if (archivo.size > TAMANO_MAXIMO_IMPORTACION) throw new Error("Archivo demasiado grande");
+
+            const datos = JSON.parse(await archivo.text());
+            const importadas = sanear(Array.isArray(datos) ? datos : datos.tareas)
+                .map(function (tarea) { return Object.assign(tarea, { id: generarId() }); });
+
+            if (!importadas.length) throw new Error("Sin tareas válidas");
+
+            tareas.push(...importadas);
+            persistir();
+            avisar(importadas.length + " " + plural(importadas.length, "tarea importada", "tareas importadas") + ".");
+        } catch (error) {
+            avisar("No se pudo importar. Elige un archivo .json exportado desde AulaTask.", { error: true });
+        } finally {
+            archivoImportar.value = "";
+        }
+    }
+
+    /* ---------- Alertas y sonido ---------- */
+    function obtenerAlertas() {
+        const vencidas = [];
+        const proximas = [];
+
+        tareas.forEach(function (tarea) {
+            if (tarea.completada) return;
+            const dias = diasHasta(tarea.fecha);
+            if (dias === null) return;
+            if (dias < 0) vencidas.push(tarea);
+            else if (dias <= DIAS_AVISO) proximas.push(tarea);
+        });
+
+        const porFecha = function (a, b) {
+            return a.fecha < b.fecha ? -1 : a.fecha > b.fecha ? 1 : 0;
+        };
+        return { vencidas: vencidas.sort(porFecha), proximas: proximas.sort(porFecha) };
+    }
+
+    function crearElementoAlerta(item) {
+        const li = document.createElement("li");
+        const entrega = describirEntrega(item.tarea);
+
+        const tarea = document.createElement("span");
+        tarea.className = "alerta-tarea";
+        tarea.textContent = item.tarea.titulo;
+
+        const persona = document.createElement("span");
+        persona.className = "alerta-persona";
+        persona.textContent = item.tarea.responsable;
+
+        li.append(crearChip(entrega.texto, entrega.clase), tarea, persona);
+        return li;
+    }
+
+    function renderizarAlertas() {
+        const datos = obtenerAlertas();
+        const todas = datos.vencidas.map(function (t) { return { tarea: t, estado: "vencida" }; })
+            .concat(datos.proximas.map(function (t) { return { tarea: t, estado: "pronto" }; }));
+
+        // El título de la pestaña muestra cuántas alertas hay, incluso si está en segundo plano.
+        document.title = (todas.length ? "(" + todas.length + ") " : "") + TITULO_BASE;
+
+        if (!todas.length) {
+            alertas.hidden = true;
+            firmaDescartada = "";
+            ultimaFirma = "";
+            return;
+        }
+
+        // Suena solo cuando aparece una alerta nueva, no en cada redibujado.
+        const nuevas = todas.filter(function (a) { return !notificadas.has(a.tarea.id + ":" + a.estado); });
+        if (nuevas.length) {
+            nuevas.forEach(function (a) { notificadas.add(a.tarea.id + ":" + a.estado); });
+            reproducir(nuevas.some(function (a) { return a.estado === "vencida"; }) ? "vencida" : "pronto");
+        }
+
+        const firma = todas.map(function (a) { return a.tarea.id + ":" + a.estado; }).join("|") +
+            "@" + fechaISO(hoyLocal());
+
+        alertas.hidden = firma === firmaDescartada;
+        if (alertas.hidden || firma === ultimaFirma) return;
+        ultimaFirma = firma;
+
+        alertas.classList.toggle("critica", datos.vencidas.length > 0);
+
+        const partes = [];
+        const nv = datos.vencidas.length;
+        const np = datos.proximas.length;
+        if (nv) partes.push(nv + " " + plural(nv, "tarea vencida", "tareas vencidas"));
+        if (np) partes.push(np + " " + plural(np, "tarea por vencer", "tareas por vencer"));
+        alertasTitulo.textContent = "Atención: " + partes.join(" y ");
+
+        const elementos = todas.slice(0, MAX_ALERTAS_VISIBLES).map(crearElementoAlerta);
+        if (todas.length > MAX_ALERTAS_VISIBLES) {
+            const resto = todas.length - MAX_ALERTAS_VISIBLES;
+            const mas = document.createElement("li");
+            mas.className = "alerta-mas";
+            mas.textContent = "y " + resto + " más en la lista.";
+            elementos.push(mas);
+        }
+        alertasLista.replaceChildren(...elementos);
+    }
+
+    function tono(contexto, frecuencia, inicio, duracion, tipoOnda) {
+        const oscilador = contexto.createOscillator();
+        const ganancia = contexto.createGain();
+        const t0 = contexto.currentTime + inicio;
+
+        oscilador.type = tipoOnda;
+        oscilador.frequency.value = frecuencia;
+        ganancia.gain.setValueAtTime(0.0001, t0);
+        ganancia.gain.exponentialRampToValueAtTime(0.2, t0 + 0.02);
+        ganancia.gain.exponentialRampToValueAtTime(0.0001, t0 + duracion);
+
+        oscilador.connect(ganancia);
+        ganancia.connect(contexto.destination);
+        oscilador.start(t0);
+        oscilador.stop(t0 + duracion + 0.05);
+    }
+
+    // Los sonidos se generan con Web Audio: no hace falta ningún archivo de audio.
+    function reproducir(tipo) {
+        if (!sonidoActivo) return;
+
+        // Antes del primer clic el navegador bloquea el audio: se deja en espera.
+        if (!huboGesto) {
+            sonidoPendiente = tipo;
+            return;
+        }
+
+        const Contexto = window.AudioContext || window.webkitAudioContext;
+        if (!Contexto) return;
+
+        try {
+            if (!contextoAudio) contextoAudio = new Contexto();
+            if (contextoAudio.state === "suspended") contextoAudio.resume();
+
+            if (tipo === "vencida") {
+                // Tres pitidos urgentes
+                tono(contextoAudio, 880, 0, 0.18, "square");
+                tono(contextoAudio, 880, 0.26, 0.18, "square");
+                tono(contextoAudio, 660, 0.52, 0.3, "square");
+            } else {
+                // Campanilla suave de dos notas
+                tono(contextoAudio, 523.25, 0, 0.35, "sine");
+                tono(contextoAudio, 659.25, 0.18, 0.5, "sine");
+            }
+        } catch (error) { /* si el audio no está disponible, la alerta visual sigue funcionando */ }
+    }
+
+    function desbloquearAudio() {
+        huboGesto = true;
+        document.removeEventListener("pointerdown", desbloquearAudio);
+        document.removeEventListener("keydown", desbloquearAudio);
+
+        if (sonidoPendiente) {
+            const tipo = sonidoPendiente;
+            sonidoPendiente = null;
+            reproducir(tipo);
+        }
+    }
+
+    function actualizarBotonSonido() {
+        iconoSonidoOn.toggleAttribute("hidden", !sonidoActivo);
+        iconoSonidoOff.toggleAttribute("hidden", sonidoActivo);
+        botonSonido.setAttribute(
+            "aria-label",
+            sonidoActivo ? "Silenciar alertas sonoras" : "Activar alertas sonoras"
+        );
+    }
+
+    /* ---------- Tema ---------- */
+    const consultaOscuro = window.matchMedia("(prefers-color-scheme: dark)");
+
+    function temaActual() {
+        return document.documentElement.dataset.tema || (consultaOscuro.matches ? "oscuro" : "claro");
+    }
+
+    function actualizarBotonTema() {
+        const oscuro = temaActual() === "oscuro";
+        // Los elementos SVG no tienen la propiedad .hidden; se usa el atributo.
+        iconoLuna.toggleAttribute("hidden", oscuro);
+        iconoSol.toggleAttribute("hidden", !oscuro);
+        botonTema.setAttribute("aria-label", oscuro ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+    }
+
+    /* ---------- 8. Eventos e inicio ---------- */
+    formulario.addEventListener("submit", function (evento) {
+        evento.preventDefault();
+
+        const datos = leerFormulario();
+        if (!validar(datos)) return;
+
+        if (idEditando) {
+            actualizarTarea(datos);
+        } else {
+            crearTarea(datos);
+        }
+    });
+
+    formulario.addEventListener("keydown", function (evento) {
+        if (evento.key === "Escape" && idEditando) cancelarEdicion();
+    });
+
+    campoTitulo.addEventListener("input", function () {
+        if (campoTitulo.hasAttribute("aria-invalid")) marcarCampo(campoTitulo, errorTitulo, "");
+    });
+
+    campoResponsable.addEventListener("input", function () {
+        if (campoResponsable.hasAttribute("aria-invalid")) marcarCampo(campoResponsable, errorResponsable, "");
+    });
+
+    botonCancelar.addEventListener("click", cancelarEdicion);
+
+    campoBusqueda.addEventListener("input", function () {
+        vista.busqueda = campoBusqueda.value;
+        renderizarLista();
+    });
+
+    document.querySelectorAll('input[name="estado"]').forEach(function (radio) {
+        radio.addEventListener("change", function () {
+            vista.estado = radio.value;
+            renderizarLista();
+        });
+    });
+
+    filtroPrioridad.addEventListener("change", function () {
+        vista.prioridad = filtroPrioridad.value;
+        renderizarLista();
+    });
+
+    selectorOrden.addEventListener("change", function () {
+        vista.orden = selectorOrden.value;
+        renderizarLista();
+    });
+
+    vacioAccion.addEventListener("click", function () {
+        if (accionVacio) accionVacio();
+    });
+
+    botonExportar.addEventListener("click", exportar);
+    botonImportar.addEventListener("click", function () { archivoImportar.click(); });
+    archivoImportar.addEventListener("change", function () {
+        if (archivoImportar.files[0]) importar(archivoImportar.files[0]);
+    });
+    botonBorrarCompletadas.addEventListener("click", borrarCompletadas);
+
+    botonTema.addEventListener("click", function () {
+        const nuevo = temaActual() === "oscuro" ? "claro" : "oscuro";
+        document.documentElement.dataset.tema = nuevo;
+        try {
+            localStorage.setItem(CLAVE_TEMA, nuevo);
+        } catch (error) { /* sin almacenamiento: el tema dura solo esta sesión */ }
+        actualizarBotonTema();
+    });
+
+    consultaOscuro.addEventListener("change", actualizarBotonTema);
+
+    botonSonido.addEventListener("click", function () {
+        sonidoActivo = !sonidoActivo;
+        sonidoPendiente = null;
+        try {
+            localStorage.setItem(CLAVE_SONIDO, sonidoActivo ? "si" : "no");
+        } catch (error) { /* la preferencia dura solo esta sesión */ }
+        actualizarBotonSonido();
+
+        if (sonidoActivo) {
+            huboGesto = true;
+            reproducir("pronto"); // Sonido de prueba al activar.
+        }
+        avisar(sonidoActivo ? "Alertas sonoras activadas." : "Alertas sonoras silenciadas.");
+    });
+
+    alertasCerrar.addEventListener("click", function () {
+        firmaDescartada = ultimaFirma;
+        alertas.hidden = true;
+    });
+
+    document.addEventListener("pointerdown", desbloquearAudio);
+    document.addEventListener("keydown", desbloquearAudio);
+
+    // Atajo: "/" lleva el foco al buscador.
+    document.addEventListener("keydown", function (evento) {
+        const destino = evento.target;
+        const escribiendo = destino instanceof HTMLElement &&
+            (destino.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(destino.tagName));
+
+        if (evento.key === "/" && !escribiendo && !evento.ctrlKey && !evento.metaKey && !evento.altKey) {
+            evento.preventDefault();
+            campoBusqueda.focus();
+        }
+    });
+
+    // Sincroniza varias pestañas abiertas a la vez.
+    window.addEventListener("storage", function (evento) {
+        if (evento.key !== CLAVE_DATOS) return;
+        tareas = cargar();
+        if (idEditando && !tareas.some(function (t) { return t.id === idEditando; })) {
+            salirDeEdicion();
+        }
+        renderizar();
+    });
+
+    // Al volver a la pestaña se recalculan los plazos (por ejemplo, tras cambiar de día).
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) renderizar();
+    });
+
+    // Si cambia el día con la pestaña abierta, se recalculan los plazos y las alertas.
+    diaMostrado = fechaISO(hoyLocal());
+    setInterval(function () {
+        const hoy = fechaISO(hoyLocal());
+        if (hoy !== diaMostrado) {
+            diaMostrado = hoy;
+            renderizar();
+        }
+    }, 60000);
+
+    try {
+        sonidoActivo = localStorage.getItem(CLAVE_SONIDO) !== "no";
+    } catch (error) { /* sin almacenamiento: sonido activado por defecto */ }
+
+    tareas = cargar();
+    actualizarBotonTema();
+    actualizarBotonSonido();
+    renderizar();
+})();
+
+    </script>
 </body>
 </html>
