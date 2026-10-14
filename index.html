@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AulaTask: gestor de tareas académicas para organizar el trabajo en equipo.">
+    <meta name="color-scheme" content="light dark">
+    <title>AulaTask | Gestor académico</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233451D1'/%3E%3Cpath d='M9 16.5l5 5 9-10' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+    <!-- Aplica el tema guardado antes de pintar la página para evitar parpadeos. -->
+    <script>
+        (function () {
+            try {
+                var tema = localStorage.getItem("aulatask.tema");
+                if (tema === "claro" || tema === "oscuro") {
+                    document.documentElement.dataset.tema = tema;
+                }
+            } catch (error) { /* sin almacenamiento: se usa el tema del sistema */ }
+        })();
+    </script>
+
+    <link rel="stylesheet" href="estilos.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="encabezado">
+        <div class="encabezado-interno">
+            <div class="marca">
+                <span class="logo" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12.5l4.5 4.5L19 7.5"/>
+                    </svg>
+                </span>
+                <div>
+                    <h1>AulaTask</h1>
+                    <p>Organiza tus tareas académicas</p>
+                </div>
+            </div>
+
+            <button type="button" id="boton-tema" class="btn-icono con-borde"
+                    aria-label="Cambiar a tema oscuro" title="Cambiar tema">
+                <svg id="icono-luna" class="icono" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+                </svg>
+                <svg id="icono-sol" class="icono" viewBox="0 0 24 24" aria-hidden="true" hidden>
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main id="contenido" class="contenedor" tabindex="-1">
+        <section class="resumen" aria-labelledby="titulo-panel">
+            <h2 id="titulo-panel">Panel de tareas</h2>
+            <p id="texto-resumen" class="resumen-texto"></p>
+
+            <div class="progreso">
+                <div id="barra" class="barra" role="img" aria-label="Sin tareas">
+                    <span id="seg-hechas" class="seg seg-hechas"></span>
+                    <span id="seg-pendientes" class="seg seg-pendientes"></span>
+                    <span id="seg-vencidas" class="seg seg-vencidas"></span>
+                </div>
+                <p id="porcentaje" class="porcentaje">Sin tareas</p>
+            </div>
+
+            <dl class="indicadores">
+                <div>
+                    <dt>Total</dt>
+                    <dd id="total">0</dd>
+                </div>
+                <div>
+                    <dt><i class="punto punto-hechas"></i>Completadas</dt>
+                    <dd id="completadas">0</dd>
+                </div>
+                <div>
+                    <dt><i class="punto punto-pendientes"></i>Pendientes</dt>
+                    <dd id="pendientes">0</dd>
+                </div>
+                <div>
+                    <dt><i class="punto punto-vencidas"></i>Vencidas</dt>
+                    <dd id="vencidas">0</dd>
+                </div>
+            </dl>
+        </section>
+
+        <div class="disposicion">
+            <section id="panel-formulario" class="panel panel-formulario" aria-labelledby="titulo-formulario">
+                <h2 id="titulo-formulario">Nueva tarea</h2>
+
+                <form id="formulario" novalidate>
+                    <div class="campo">
+                        <label for="titulo">Título</label>
+                        <input id="titulo" name="titulo" type="text" maxlength="100"
+                               placeholder="Ej. Preparar exposición" autocomplete="off"
+                               aria-describedby="error-titulo" required>
+                        <p id="error-titulo" class="error-campo"></p>
+                    </div>
+
+                    <div class="campo">
+                        <label for="responsable">Responsable</label>
+                        <input id="responsable" name="responsable" type="text" maxlength="60"
+                               placeholder="Nombre del estudiante" list="lista-responsables"
+                               autocomplete="off" aria-describedby="error-responsable" required>
+                        <p id="error-responsable" class="error-campo"></p>
+                    </div>
+
+                    <div class="campo">
+                        <label for="materia">Materia <span class="opcional">(opcional)</span></label>
+                        <input id="materia" name="materia" type="text" maxlength="60"
+                               placeholder="Ej. Historia" list="lista-materias" autocomplete="off">
+                    </div>
+
+                    <fieldset class="campo">
+                        <legend>Prioridad</legend>
+                        <div class="segmentos prioridades">
+                            <label class="p-alta">
+                                <input type="radio" name="prioridad" value="alta">
+                                <span>Alta</span>
+                            </label>
+                            <label class="p-media">
+                                <input type="radio" name="prioridad" value="media" checked>
+                                <span>Media</span>
+                            </label>
+                            <label class="p-baja">
+                                <input type="radio" name="prioridad" value="baja">
+                                <span>Baja</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <div class="campo">
+                        <label for="fecha">Fecha de entrega <span class="opcional">(opcional)</span></label>
+                        <input id="fecha" name="fecha" type="date">
+                    </div>
+
+                    <div class="acciones-form">
+                        <button type="submit" id="boton-guardar" class="btn btn-principal">Agregar tarea</button>
+                        <button type="button" id="boton-cancelar" class="btn btn-secundario" hidden>Cancelar</button>
+                    </div>
+                </form>
+
+                <datalist id="lista-responsables"></datalist>
+                <datalist id="lista-materias"></datalist>
+            </section>
+
+            <section class="panel panel-lista" aria-labelledby="titulo-lista">
+                <div class="cabecera-lista">
+                    <h2 id="titulo-lista">Tareas</h2>
+                    <p id="cantidad" class="cantidad"></p>
+                </div>
+
+                <div class="herramientas">
+                    <div class="busqueda">
+                        <svg class="icono" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"/>
+                            <path d="M20 20l-3.5-3.5"/>
+                        </svg>
+                        <label for="busqueda" class="sr-only">Buscar tareas</label>
+                        <input id="busqueda" type="search" placeholder="Buscar tareas"
+                               autocomplete="off">
+                    </div>
+
+                    <fieldset class="segmentos" id="filtro-estado">
+                        <legend class="sr-only">Filtrar por estado</legend>
+                        <label>
+                            <input type="radio" name="estado" value="todas" checked>
+                            <span>Todas <b class="cuenta" id="cuenta-todas">0</b></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="estado" value="pendientes">
+                            <span>Pendientes <b class="cuenta" id="cuenta-pendientes">0</b></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="estado" value="completadas">
+                            <span>Completadas <b class="cuenta" id="cuenta-completadas">0</b></span>
+                        </label>
+                    </fieldset>
+
+                    <div class="selectores">
+                        <label for="filtro-prioridad" class="sr-only">Filtrar por prioridad</label>
+                        <select id="filtro-prioridad">
+                            <option value="todas">Toda prioridad</option>
+                            <option value="alta">Prioridad alta</option>
+                            <option value="media">Prioridad media</option>
+                            <option value="baja">Prioridad baja</option>
+                        </select>
+
+                        <label for="orden" class="sr-only">Ordenar tareas</label>
+                        <select id="orden">
+                            <option value="recientes">Más recientes</option>
+                            <option value="entrega">Entrega más próxima</option>
+                            <option value="prioridad">Mayor prioridad</option>
+                        </select>
+                    </div>
+                </div>
+
+                <ul id="lista" class="lista"></ul>
+
+                <div id="vacio" class="vacio" hidden>
+                    <svg class="icono" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="4" y="3" width="16" height="18" rx="3"/>
+                        <path d="M8 8h8M8 12h8M8 16h4"/>
+                    </svg>
+                    <p id="vacio-titulo" class="vacio-titulo"></p>
+                    <p id="vacio-texto" class="vacio-texto"></p>
+                    <button type="button" id="vacio-accion" class="btn btn-secundario"></button>
+                </div>
+
+                <div class="pie-lista">
+                    <button type="button" id="boton-exportar" class="btn btn-texto">Exportar</button>
+                    <button type="button" id="boton-importar" class="btn btn-texto">Importar</button>
+                    <input type="file" id="archivo-importar" accept="application/json,.json" hidden>
+                    <button type="button" id="boton-borrar-completadas" class="btn btn-texto">Borrar completadas</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="pie">
+        <p>AulaTask. Proyecto académico de trabajo colaborativo.</p>
+        <p>Tus tareas se guardan en este navegador.</p>
+    </footer>
+
+    <div id="avisos" class="avisos" role="status" aria-live="polite"></div>
+</body>
+</html>
