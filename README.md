@@ -42,7 +42,12 @@ AulaTask/
 ├── estilos.css   Estilos, temas y diseño adaptable
 ├── app.js        Lógica de la aplicación
 ├── README.md
-└── .gitignore
+├── .gitignore
+└── SistemaUsuarios/
+    ├── backend/  API REST y esquema MySQL
+    ├── frontend/ Aplicación React
+    ├── evidencias/
+    └── Informe_Trabajo_Grupal.docx
 ```
 
 ## Instalación y ejecución
@@ -51,6 +56,31 @@ AulaTask/
 3. Abrir `index.html` en el navegador.
 
 No se necesita instalar dependencias ni ejecutar un servidor.
+
+## Sistema de usuarios
+El proyecto también incluye el sistema CRUD de usuarios con React, Express y
+MySQL. Es una aplicación independiente: AulaTask sigue funcionando al abrir
+`index.html`, mientras que el módulo de usuarios requiere Node.js y MySQL.
+
+1. Crea la base de datos ejecutando `SistemaUsuarios/backend/schema.sql` en
+   MySQL o importándolo desde phpMyAdmin.
+2. En PowerShell, crea el archivo de configuración local:
+   `Copy-Item SistemaUsuarios\backend\.env.example SistemaUsuarios\backend\.env`.
+   Ajusta allí las credenciales de MySQL si es necesario. `.env` es local y no
+   debe compartirse.
+3. En una terminal, instala y ejecuta la API:
+   ```powershell
+   cd SistemaUsuarios\backend
+   npm install
+   npm start
+   ```
+4. En otra terminal, instala y ejecuta el frontend:
+   ```powershell
+   cd SistemaUsuarios\frontend
+   npm install
+   npm run dev
+   ```
+5. Abre la dirección que indique Vite (por defecto `http://localhost:5173`).
 
 ## Formato de exportación
 El archivo exportado es un JSON con esta forma:

@@ -1,0 +1,28 @@
+=== 1. CREATE (INSERT / POST) ===
+$ curl -s -X POST localhost:3000/usuarios -H 'Content-Type: application/json' -d '{"nombre":"Juan Perez","correo":"juan@senati.pe"}'
+{"message":"Usuario registrado con éxito","id":1}
+
+$ curl -s -X POST localhost:3000/usuarios -H 'Content-Type: application/json' -d '{"nombre":"Maria Lopez","correo":"maria@senati.pe"}'
+{"message":"Usuario registrado con éxito","id":2}
+
+=== 2. READ (SELECT / GET) ===
+$ curl -s localhost:3000/usuarios
+[{"id":1,"nombre":"Juan Perez","correo":"juan@senati.pe"},{"id":2,"nombre":"Maria Lopez","correo":"maria@senati.pe"}]
+
+=== 3. UPDATE (UPDATE / PUT) ===
+$ curl -s -X PUT localhost:3000/usuarios/1 -H 'Content-Type: application/json' -d '{"nombre":"Juan Carlos Perez","correo":"juan.perez@senati.pe"}'
+{"message":"Usuario actualizado con éxito"}
+
+$ curl -s localhost:3000/usuarios/1
+{"id":1,"nombre":"Juan Carlos Perez","correo":"juan.perez@senati.pe"}
+
+=== 4. DELETE (DELETE / DELETE) ===
+$ curl -s -X DELETE localhost:3000/usuarios/2
+{"message":"Usuario eliminado con éxito"}
+
+$ curl -s localhost:3000/usuarios
+[{"id":1,"nombre":"Juan Carlos Perez","correo":"juan.perez@senati.pe"}]
+
+=== Verificacion directa en MySQL ===
+id	nombre	correo
+1	Juan Carlos Perez	juan.perez@senati.pe

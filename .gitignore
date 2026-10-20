@@ -3,3 +3,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.zip
+SistemaUsuarios/backend/.env
+SistemaUsuarios/backend/node_modules/
+SistemaUsuarios/frontend/node_modules/
+SistemaUsuarios/frontend/dist/
